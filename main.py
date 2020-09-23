@@ -46,14 +46,18 @@ def two_dimensional_array_to_list(array):
     return res
 
 
-def do_pages(fiches, emails):
-    i = 4
+def do_nominations_pages(fiches, emails):
+    i = 1
+    is_last_page = 0
 
     while True:
         soup = get_soup("{}/{}vie-hopitaux.php?item=mouvements&page={}".format(website_url, directory_endpoint, i))
         next_page = soup.find('a', attrs={'class': 'next'}, href=True)
 
-        if next_page is not None and next_page['href'] and next_page['href'] != "#":
+        print("Scrapping page {}".format(i))
+        if next_page['href'] == "#":
+            is_last_page += 1
+        if next_page is not None and next_page['href'] and next_page['href'] != "#" and is_last_page <= 1:
             fiches.append(get_fiches(website_url + next_page['href']))
             i += 1
         else:
@@ -80,7 +84,7 @@ def write_output(emails):
 def main():
     fiches = []
     emails = []
-    do_pages(fiches, emails)
+    do_nominations_pages(fiches, emails)
     write_output(emails)
 
 
