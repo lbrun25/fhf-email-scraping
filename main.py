@@ -116,12 +116,24 @@ def do_fiches(emails):
         except Exception as e:
             print(e)
             if retry < 3 and config.isRetry:
+                print("Retry...")
                 retry += 1
                 time.sleep(10)
                 continue
         i += 1
         retry = 0
         time.sleep(config.sleepTime)
+
+
+def str2bool(v):
+    if isinstance(v, bool):
+       return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
 def main():
@@ -132,8 +144,7 @@ def main():
     parser.add_argument("--lower", required=False, help="Start index", type=int)
     parser.add_argument("--upper", required=False, help="End index", type=int)
     parser.add_argument("--sleep", required=False, help="Time to sleep between each request", type=float)
-    parser.add_argument("--retry", required=False, help="Retry request if it failed", type=bool)
-
+    parser.add_argument("--retry", required=False, help="Retry request if it failed", type=str2bool, default=False)
 
     args = parser.parse_args()
     config.mode = args.mode
