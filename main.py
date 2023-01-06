@@ -3,6 +3,7 @@ import requests
 import time
 import sys
 import argparse
+from itertools import chain
 
 
 website_url = "https://etablissements.fhf.fr"
@@ -48,18 +49,10 @@ def get_emails(fiches):
         if mail is not None:
             output = mail.text.split()[-1]
             emails.append(output.strip())
+        time.sleep(config.sleepTime)
     return emails
 
-
-def two_dimensional_array_to_list(array):
-    res = []
-
-    for x in array:
-        for y in x:
-            res.append(y)
-    return res
-
-
+# Do nomination pages https://etablissements.fhf.fr/annuaire/vie-hopitaux.php?item=mouvements&page=1
 def do_nominations_pages(fiches, emails):
     i = 1
     is_last_page = 0
@@ -76,14 +69,17 @@ def do_nominations_pages(fiches, emails):
             i += 1
         else:
             break
-    fiches = two_dimensional_array_to_list(fiches)
+        time.sleep(config.sleepTime)
+    fiches = list(chain(*fiches))
     fiches = list(dict.fromkeys(fiches))
     emails.append(get_emails(fiches))
-    emails = two_dimensional_array_to_list(emails)
+    emails = list(chain(*emails))
 
 
 def write_output(emails):
-    # Remove duplicate
+    # Flatten multidimensional array
+    emails = list(chain(*emails))
+    # Remove duplicates
     emails = list(dict.fromkeys(emails))
 
     # Write in output.txt
@@ -97,7 +93,7 @@ def write_output(emails):
 # Do fiches https://etablissements.fhf.fr/annuaire/hopital-fiche.php?id=2
 def do_fiches(emails):
     i = config.startIndex
-    notExistMsg = "Cet établissement n'existe pas ou n'existe plus."
+    notExistMsg = "This establishment does not exist or no longer exists."
     retry = 0
 
     while i < config.endIndex:
@@ -141,10 +137,10 @@ def main():
     emails = []
     parser = argparse.ArgumentParser(description="Get some mail on https://etablissements.fhf.fr")
     parser.add_argument("--mode", required=True, help="1. Get emails from the nominations page\n2. Get emails by iterating fiche id", type=int)
-    parser.add_argument("--lower", required=False, help="Start index", type=int)
-    parser.add_argument("--upper", required=False, help="End index", type=int)
-    parser.add_argument("--sleep", required=False, help="Time to sleep between each request", type=float)
-    parser.add_argument("--retry", required=False, help="Retry request if it failed", type=str2bool, default=False)
+    parser.add_argument("--lower", required=False, help="Start index", type=int, default=0)
+    parser.add_argument("--upper", required=False, help="End index", type=int, default=10000)
+    parser.add_argument("--sleep", required=False, help="Time to sleep between each request", type=float, default=2)
+    parser.add_argument("--retry", required=False, help="Retry request if it failed", action=argparse.BooleanOptionalAction, default=False)
 
     args = parser.parse_args()
     config.mode = args.mode
