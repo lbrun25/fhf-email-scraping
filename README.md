@@ -4,7 +4,7 @@ This script scrapes email addresses from the FHF (Fédération hospitalière de 
 
 ## Disclaimer
 
-This script is for learning purpose only. Do not use the emails to spam people or sell them.
+This script is for educational purposes only. Please do not use the collected emails to spam or sell to others.
 
 ## Usage
 
