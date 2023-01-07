@@ -10,13 +10,13 @@ This script is for educational purposes only. Please do not use the collected em
 
 You can run `python3 main.py -h` to display the usage instructions for the script.
 
-You can run `python3 main.py --mode 1` to scrap emails from nomination pages or `python3 main.py --mode 2` to scrap emails from fiches.
+You can run `python3 main.py --mode 1` to scrape emails from nomination pages or `python3 main.py --mode 2` to scrap emails from fiches.
 
 Then, The emails that are scraped are saved in the file `output.txt`. Please note that the content of this file is deleted each time the script is launched.
 
 ### Nomination pages
 
-You can scrap emails from nomination pages. It will scrape emails from pages starting at https://etablissements.fhf.fr/annuaire/vie-hopitaux.php?item=mouvements&page=1.
+You can scrape emails from nomination pages. It will scrape emails from pages starting at https://etablissements.fhf.fr/annuaire/vie-hopitaux.php?item=mouvements&page=1.
 
 Run `python3 main.py --mode 1`
 
@@ -25,7 +25,7 @@ For example, you can run `python3 main.py --mode 1 --sleep 5`.
 
 ### Fiches
 
-You can scrap emails by iterating through a list of institution by providing an ID range. For example, when the id is 2, it will scrape the email from this page: https://etablissements.fhf.fr/annuaire/hopital-fiche.php?id=2.
+You can scrape emails by iterating through a list of institution by providing an ID range. For example, when the id is 2, it will scrape the email from this page: https://etablissements.fhf.fr/annuaire/hopital-fiche.php?id=2.
 This method may not be effective as some institutions may not be listed or may no longer be in operation, but you can still scrape many emails by browsing the records by id.
 
 You can specify a range for the IDs to iterate by using the `--lower` and `--upper` arguments. The default range is from 0 to 10000.
